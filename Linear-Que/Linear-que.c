@@ -22,7 +22,7 @@ void enqeue(int *q,int *f,int *r)
 //Function to delete the element from the Que
 void deqeue(int *q,int *f,int *r)
 {
-	if(*f>=*r||*f==-1)
+	if(*f>=*r||*r==-1)
 	{
 		printf("Que is empty\n");
 	}
