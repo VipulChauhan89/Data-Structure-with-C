@@ -14,7 +14,7 @@ node *delete(node *head,int k)
     node *temp,*del;
     if(head==NULL)
     {
-        printf("There is no element in a linked list ");
+        printf("There is no element in a linked list \n");
     }
     else if(head->data==k)
     {
@@ -39,7 +39,7 @@ node *delete(node *head,int k)
     }
     if(count==0)
     {
-        printf("%d is not in the list .",k);
+        printf("%d is not in the list - ",k);
     }
     return head;
 }
