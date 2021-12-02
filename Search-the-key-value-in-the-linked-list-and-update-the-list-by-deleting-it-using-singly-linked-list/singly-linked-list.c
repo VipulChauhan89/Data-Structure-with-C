@@ -72,4 +72,5 @@ int main()
         printf("%d ",temp->data);
     }
     printf("\n");
+    return 0;
 }
