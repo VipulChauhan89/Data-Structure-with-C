@@ -87,4 +87,6 @@ int main()
         printf("%d ",temp->data);
         temp=temp->next;
     }while(temp!=head);
+    printf("\n");
+    return 0;
 }
