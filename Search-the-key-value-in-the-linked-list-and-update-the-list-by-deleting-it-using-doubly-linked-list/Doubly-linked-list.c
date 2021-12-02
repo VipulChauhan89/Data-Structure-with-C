@@ -83,4 +83,5 @@ int main()
     {
         printf("%d ",temp->data);
     }
+    printf("\n");
 }
