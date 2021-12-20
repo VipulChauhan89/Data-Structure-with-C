@@ -1,109 +1,140 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include<limits.h>
-void enqueue(int *queue, int *front, int *rear, int size)
+#define MAX 5
+typedef struct priorityqueue
 {
-   if(*rear==-1 && *front==-1)
-    {
-        *front=*rear=0;
-    }
-    if(*rear>=size)
-    {
-        printf("Queue is Full\n");
-    }
-    printf("Enter the number in que : ");
-    scanf("%d",&queue[*rear]);
-    (*rear)++;
-}
-void dequeue(int *queue,int *front,int *rear,int size)
+    int ele;
+    int priority;
+    
+}que;
+int isempty(int rear)
 {
-    int del;
-    if(*rear==-1 && *front==-1)
+    if(rear==-1)
     {
-        printf("Queue is Empty\n");
+        return 1;
     }
     else
     {
-        printf("The element %d is being deleted\n",queue[*front]);
-        for(int i=*front;i<*rear;i++)
-        {
-            queue[i]=queue[i+1];
-        }
-        (*rear)--;
+        return 0;
     }
 }
-void peek(int *queue,int *front,int *rear)
+int isfull(int rear)
 {
-    if(*front==-1 && *rear==*front )
+    if(rear==MAX-1)
     {
-        printf("Queue is Empty\n");
+        return 1;
     }
     else
     {
-        printf("Number at the front of the que is : %d\n",queue[*front]);
+        return 0;
     }
 }
-void display(int *queue,int *front,int *rear,int size)
+void insert(que *pq,int *rear,int ele,int p)
 {
-    if(*front==-1 && *rear==-1)
-    {
-        printf("Queue is Empty\n");
-    }
-    for(int i=*front;i<=*rear;i++)
-    {
-        printf("Number : %d is at index %d\n",queue[i],i);
-    }
+	*rear=*rear+1;
+	pq[*rear].ele=ele;
+	pq[*rear].priority=p;
 }
-void sort(int *queue,int front,int rear,int size)
+int gethighestpriority(que*pq,int rear)
 {
-    for(int i=front;i<=rear;i++)
+    int i,p;
+    p=-1;
+    if(!isempty(rear))
     {
-        for(int j=i+1;j<=rear;j++)
+        for(i=0;i<=rear;i++)
         {
-            if(queue[i]>queue[j])
+            if(pq[i].priority>p)
             {
-                queue[i]=queue[i]+queue[j];
-                queue[j]=queue[i]-queue[j];
-                queue[i]=queue[i]-queue[j];
+                p=pq[i].priority;
             }
         }
+    }
+    return p;
+}
+int deletehighestpriority(que *pq,int *rear)
+{
+    int i,j,p,ele;
+    p=gethighestpriority(pq,*rear);
+    for(i=0;i<=*rear;i++)
+    {
+        if(pq[i].priority==p)
+        {
+            ele=pq[i].ele;
+            break;
+        }
+    }
+    if(i<*rear)
+    {
+        for(j=i;j<*rear;j++)
+        {
+            pq[j].ele=pq[j+1].ele;
+            pq[j].priority=pq[j+1].priority;
+        }
+    }
+    *rear=*rear-1;
+    return ele;
+}
+void display(que *pq,int rear)
+{
+    int i;
+    printf("Priority queue: \n");
+    for(i=0;i<=rear;i++)
+    {
+        printf("Element: %d Priority: %d\n", pq[i].ele, pq[i].priority);
     }
 }
 int main()
 {
-    int size,choice;
-    printf("Enter the size of que : ");
-    scanf("%d",&size);
-    int queue[size];
-    int front=-1,rear=-1;
+    que pq[MAX];
+    int rear=-1;
+	int ch,p,ele;
+	printf("Enter\n");
     do
-    {   
-        printf("\n1.Enqueue\n2.Dequeue\n3.peek\n4.Display\n5.Exit\n");
-        printf("Enter your choice : ");
-        scanf("%d",&choice);
-        //printf("front is  %d and rear is %d now\n",front,rear);
-        switch(choice)
+    {
+        printf("\n1-To insert\n2-To get highest priority\n3-To delete\n4-To display\n5-To exit\n");
+        printf("Enter your choice:");
+        scanf("%d",&ch);
+        switch(ch)
         {
             case 1:
-                enqueue(queue,&front,&rear,size);
-                sort(queue,front,rear,size);
-                display(queue,&front,&rear,size);
+			    if(isfull(rear))
+            	    printf("Priority queue is full.");
+                else
+				{
+					printf("Enter element to insert :");
+					scanf("%d",&ele);
+					printf("Enter priority :");
+					scanf("%d",&p);
+					insert(pq,&rear,ele,p);
+				}
                 break;
             case 2:
-                dequeue(queue,&front,&rear,size);
+                if(isempty(rear))
+                {
+                    printf("The queue is empty\n");
+                }
+                else
+                {
+                    p=gethighestpriority(pq,rear);
+                    printf("The highest priority = %d\n",p);
+                }
                 break;
             case 3:
-                peek(queue,&front,&rear);
+                if (isempty(rear))
+                {
+                    printf("Queue is empty\n");
+                }
+                else
+                {
+                    ele=deletehighestpriority(pq,&rear);
+                    printf("%d is deleted\n", ele);
+                }
                 break;
             case 4:
-                display(queue,&front,&rear,size);
-                break;
-            case 5:
+                display(pq,rear);
                 break;
             default:
-                printf("You entered the wrong choice.\n");
+                break;
         }
-        sort(queue,front,rear,size);
-    }while(choice!=5);
-    return 0;
+    } while (ch != 5);
 }
